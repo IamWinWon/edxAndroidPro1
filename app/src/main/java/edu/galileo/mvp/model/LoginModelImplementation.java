@@ -2,18 +2,20 @@ package edu.galileo.mvp.model;
 
 import android.os.AsyncTask;
 
+import org.greenrobot.eventbus.EventBus;
+
+import edu.galileo.mvp.event.CancelledEvent;
+import edu.galileo.mvp.event.PasswordErrorEvent;
+import edu.galileo.mvp.event.SuccessEvent;
+
 public class LoginModelImplementation implements LoginModel {
 
-    private OnLoginFinishedListener listener;
-
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "test@galileo.edu:testtest", "test2@galileo.edu:testtest"
+            "t@galileo.du:qwerty", "test2@galileo.edu:testtest"
     };
 
     @Override
-    public void login(String userName, String password, OnLoginFinishedListener listener) {
-        this.listener = listener;
-
+    public void login(String userName, String password) {
         new UserLoginTask(userName, password).execute();
     }
 
@@ -54,15 +56,15 @@ public class LoginModelImplementation implements LoginModel {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                listener.onSuccess();
+                EventBus.getDefault().post(new SuccessEvent());
             } else {
-                listener.onPasswordError();
+                EventBus.getDefault().post(new PasswordErrorEvent());
             }
         }
 
         @Override
         protected void onCancelled() {
-            listener.onCancelled();
+            EventBus.getDefault().post(new CancelledEvent());
         }
     }
 }

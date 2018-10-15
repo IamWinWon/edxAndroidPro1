@@ -7,7 +7,7 @@ import edu.galileo.mvp.model.LoginModel;
 import edu.galileo.mvp.model.LoginModelImplementation;
 import edu.galileo.mvp.view.LoginView;
 
-public class LoginPresenterImplementation implements LoginPresenter, LoginModel.OnLoginFinishedListener {
+public class LoginPresenterImplementation implements LoginPresenter {
 
     private LoginView loginView;
     private LoginModel loginModel;
@@ -15,23 +15,6 @@ public class LoginPresenterImplementation implements LoginPresenter, LoginModel.
     public LoginPresenterImplementation(LoginView loginView) {
         this.loginView = loginView;
         this.loginModel = new LoginModelImplementation();
-    }
-
-    @Override
-    public void onSuccess() {
-        loginView.showProgressBar(false);
-        loginView.successAction();
-    }
-
-    @Override
-    public void onPasswordError() {
-        loginView.showProgressBar(false);
-        loginView.setPasswordError(R.string.error_incorrect_password);
-    }
-
-    @Override
-    public void onCancelled() {
-        loginView.showProgressBar(false);
     }
 
     @Override
@@ -52,7 +35,7 @@ public class LoginPresenterImplementation implements LoginPresenter, LoginModel.
         }
 
         loginView.showProgressBar(true);
-        loginModel.login(userName, password, this);
+        loginModel.login(userName, password);
     }
 
     private boolean isEmailValid(String email) {
